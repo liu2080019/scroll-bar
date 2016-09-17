@@ -35,12 +35,20 @@ var	sccrollBarObj={
 			flag=0;
 			document.body.onselectstart = function(){return false};
 		}
-		warp.onmousewheel=function(e){
+
+		if(window.navigator.userAgent.toLowerCase().indexOf('firefox')!=-1){
+			document.addEventListener("DOMMouseScroll",function(e){wheel(e);},false);
+		}
+		else{
+			warp.onmousewheel=function(e){wheel(e);}
+		}	
+
+		function wheel(e){
 			var e=e||window.event;
-			if(e.wheelDelta>0&&e.wheelDelta%120==0){
+			if(e.wheelDelta>0&&e.wheelDelta%120==0||e.detail===-3){
 				newPos=newPos-5<0?0:newPos-5;
 			}
-			else if(e.wheelDelta<0&&e.wheelDelta%120==0){
+			else if(e.wheelDelta<0&&e.wheelDelta%120==0||e.detail===3){
 				newPos=newPos+5>scrollH-barH?(scrollH-barH):newPos+5;
 			}
 			moveBar(newPos);
@@ -68,3 +76,4 @@ scrollBar.createScrollBar({
 	speed:5,
 	flag:0
 });
+	
